@@ -18,8 +18,8 @@ canvas {
   transform: translate(-50%, -50%);
   padding: 20px 40px;
   font-size: 24px;
-  background-color: #ADD8E6; /* Light blue */
-  color: white;
+  background-color: #003366; /* Dark blue background */
+  color: white; /* White text */
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -27,5 +27,5 @@ canvas {
 }
 
 .play-button:hover {
-  background-color: #87CEFA; /* Slightly darker blue */
+  background-color: #002244; /* Slightly darker blue on hover */
 }
