@@ -1,4 +1,5 @@
 
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -13,10 +14,10 @@ let ascendForce = 2;  // Increased ascend force
 let score = 0;
 
 const skyImage = new Image();
-skyImage.src = 'https://example.com/sky-with-clouds.png';  // Add a URL to a sky with clouds image
+skyImage.src = 'https://example.com/sky-with-clouds.png';  // Add a valid URL for sky background
 
 const planeImage = new Image();
-planeImage.src = 'https://example.com/plane-image.png';  // Add a URL to a plane image
+planeImage.src = 'https://example.com/plane-image.png';  // Add a valid URL for plane image
 
 class Plane {
   constructor() {
@@ -34,6 +35,10 @@ class Plane {
   update() {
     this.velocity += gravity;
     this.y += this.velocity;
+
+    if (this.y + this.height > canvas.height || this.y < 0) {
+      gameOver();
+    }
   }
 
   flap() {
@@ -50,9 +55,9 @@ class Pipe {
   }
 
   draw() {
-    ctx.fillStyle = "#32CD32";  // Change pipe color to green
-    ctx.fillRect(this.x, 0, this.width, this.height);  // Top pipe
-    ctx.fillRect(this.x, this.height + this.gap, this.width, canvas.height - this.height - this.gap);  // Bottom pipe
+    ctx.fillStyle = "#32CD32"; // Green pipes
+    ctx.fillRect(this.x, 0, this.width, this.height); // Top pipe
+    ctx.fillRect(this.x, this.height + this.gap, this.width, canvas.height - this.height - this.gap); // Bottom pipe
   }
 
   update() {
@@ -62,7 +67,7 @@ class Pipe {
 
 function startGame() {
   gameStarted = true;
-  document.getElementById("playButton").style.display = "none";  // Hide play button
+  document.getElementById("playButton").style.display = "none"; // Hide play button
   plane = new Plane();
   pipes = [];
   score = 0;
@@ -74,35 +79,34 @@ function drawBackground() {
 }
 
 function animate() {
+  if (!gameStarted) return;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBackground();
   plane.update();
   plane.draw();
 
-  if (gameStarted) {
-    if (Math.random() < 0.01) {
-      pipes.push(new Pipe());
+  if (Math.random() < 0.01) {
+    pipes.push(new Pipe());
+  }
+
+  pipes.forEach((pipe, index) => {
+    pipe.update();
+    pipe.draw();
+
+    if (pipe.x + pipe.width < 0) {
+      pipes.splice(index, 1);
+      score++;
     }
 
-    pipes.forEach((pipe, index) => {
-      pipe.update();
-      pipe.draw();
-
-      if (pipe.x + pipe.width < 0) {
-        pipes.splice(index, 1);  // Remove pipes that are off-screen
-        score++;
-      }
-
-      // Collision detection (simple check for pipe collision)
-      if (
-        plane.x + plane.width > pipe.x &&
-        plane.x < pipe.x + pipe.width &&
-        (plane.y < pipe.height || plane.y + plane.height > pipe.height + pipe.gap)
-      ) {
-        gameOver();
-      }
-    });
-  }
+    if (
+      plane.x + plane.width > pipe.x &&
+      plane.x < pipe.x + pipe.width &&
+      (plane.y < pipe.height || plane.y + plane.height > pipe.height + pipe.gap)
+    ) {
+      gameOver();
+    }
+  });
 
   requestAnimationFrame(animate);
 }
@@ -110,7 +114,7 @@ function animate() {
 function gameOver() {
   gameStarted = false;
   alert("Game Over! Score: " + score);
-  document.getElementById("playButton").style.display = "block";  // Show play button again
+  document.getElementById("playButton").style.display = "block"; // Show play button again
 }
 
 document.getElementById("playButton").addEventListener("click", startGame);
