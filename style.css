@@ -1,31 +1,72 @@
 
+/* General Reset */
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #87CEEB; /* Sky color */
+  font-family: 'Arial', sans-serif;
+  background-color: #87CEEB; /* Sky blue background */
 }
 
+/* Fullscreen Canvas */
 canvas {
   display: block;
-  background: #87CEEB; /* Sky color */
+  background: transparent; /* Background is now the sky image set in game.js */
 }
 
+/* Centered Play Button */
 .play-button {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 20px 40px;
+  padding: 15px 50px;
   font-size: 24px;
-  background-color: #003366; /* Dark blue background */
-  color: white; /* White text */
+  font-weight: bold;
+  background-color: #003366; /* Dark blue */
+  color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .play-button:hover {
-  background-color: #002244; /* Slightly darker blue on hover */
+  background-color: #002244; /* Darker blue on hover */
+  transform: translate(-50%, -50%) scale(1.05); /* Slightly grow on hover */
+}
+
+.play-button:active {
+  transform: translate(-50%, -50%) scale(0.95); /* Shrink on click */
+}
+
+/* Game Over Alert Styling */
+#game-over-alert {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  font-size: 24px;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Score Counter */
+.score {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 24px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
