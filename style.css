@@ -1,10 +1,31 @@
 
 body {
   margin: 0;
+  padding: 0;
   overflow: hidden;
+  background-color: #87CEEB; /* Sky color */
 }
+
 canvas {
   display: block;
-  margin: auto;
-  background: #70c5ce; /* Placeholder background */
+  background: #87CEEB; /* Sky color */
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px 40px;
+  font-size: 24px;
+  background-color: #ADD8E6; /* Light blue */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+}
+
+.play-button:hover {
+  background-color: #87CEFA; /* Slightly darker blue */
 }
