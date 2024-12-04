@@ -1,48 +1,128 @@
 
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let plane = { x: 50, y: canvas.height / 2, width: 40, height: 30, velocity: 0, gravity: 0.5, lift: -10 };
-let pipes = [], frameCount = 0, score = 0, isGameOver = false;
+let plane;
+let pipes = [];
+let gameStarted = false;
+let gravity = 0.1;  // Reduced gravity force
+let ascendForce = 2;  // Increased ascend force
+let score = 0;
 
-function createPipe() {
-  let gapHeight = 150 - Math.min(50, score * 2);
-  let topHeight = Math.random() * (canvas.height / 2);
-  pipes.push({ x: canvas.width, top: topHeight, bottom: topHeight + gapHeight, width: 60, speed: 3 + Math.min(2, score / 10) });
+const skyImage = new Image();
+skyImage.src = 'https://example.com/sky-with-clouds.png';  // Add a URL to a sky with clouds image
+
+const planeImage = new Image();
+planeImage.src = 'https://example.com/plane-image.png';  // Add a URL to a plane image
+
+class Plane {
+  constructor() {
+    this.x = 150;
+    this.y = canvas.height / 2;
+    this.width = 50;
+    this.height = 50;
+    this.velocity = 0;
+  }
+
+  draw() {
+    ctx.drawImage(planeImage, this.x, this.y, this.width, this.height);
+  }
+
+  update() {
+    this.velocity += gravity;
+    this.y += this.velocity;
+  }
+
+  flap() {
+    this.velocity = -ascendForce;
+  }
 }
 
-function updatePipes() {
-  pipes.forEach(pipe => { pipe.x -= pipe.speed; });
-  pipes = pipes.filter(pipe => pipe.x + pipe.width > 0);
+class Pipe {
+  constructor() {
+    this.width = 60;
+    this.height = Math.floor(Math.random() * (canvas.height / 1.5)) + 100;
+    this.x = canvas.width;
+    this.gap = 200;
+  }
+
+  draw() {
+    ctx.fillStyle = "#32CD32";  // Change pipe color to green
+    ctx.fillRect(this.x, 0, this.width, this.height);  // Top pipe
+    ctx.fillRect(this.x, this.height + this.gap, this.width, canvas.height - this.height - this.gap);  // Bottom pipe
+  }
+
+  update() {
+    this.x -= 2;
+  }
 }
 
-function detectCollision(pipe) {
-  return (plane.y < pipe.top || plane.y + plane.height > pipe.bottom || plane.y + plane.height > canvas.height);
+function startGame() {
+  gameStarted = true;
+  document.getElementById("playButton").style.display = "none";  // Hide play button
+  plane = new Plane();
+  pipes = [];
+  score = 0;
+  animate();
 }
 
-function draw() {
+function drawBackground() {
+  ctx.drawImage(skyImage, 0, 0, canvas.width, canvas.height);
+}
+
+function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'blue'; ctx.fillRect(plane.x, plane.y, plane.width, plane.height);
-  pipes.forEach(pipe => {
-    ctx.fillStyle = 'green';
-    ctx.fillRect(pipe.x, 0, pipe.width, pipe.top);
-    ctx.fillRect(pipe.x, pipe.bottom, pipe.width, canvas.height - pipe.bottom);
-  });
-  ctx.fillStyle = 'white'; ctx.font = '24px Arial'; ctx.fillText(`Score: ${score}`, 10, 30);
+  drawBackground();
+  plane.update();
+  plane.draw();
+
+  if (gameStarted) {
+    if (Math.random() < 0.01) {
+      pipes.push(new Pipe());
+    }
+
+    pipes.forEach((pipe, index) => {
+      pipe.update();
+      pipe.draw();
+
+      if (pipe.x + pipe.width < 0) {
+        pipes.splice(index, 1);  // Remove pipes that are off-screen
+        score++;
+      }
+
+      // Collision detection (simple check for pipe collision)
+      if (
+        plane.x + plane.width > pipe.x &&
+        plane.x < pipe.x + pipe.width &&
+        (plane.y < pipe.height || plane.y + plane.height > pipe.height + pipe.gap)
+      ) {
+        gameOver();
+      }
+    });
+  }
+
+  requestAnimationFrame(animate);
 }
 
-function gameLoop() {
-  if (isGameOver) { alert(`Game Over! Score: ${score}`); return; }
-  plane.velocity += plane.gravity; plane.y += plane.velocity;
-  if (frameCount % 100 === 0) { createPipe(); score++; }
-  pipes.forEach(pipe => {
-    if (plane.x < pipe.x + pipe.width && plane.x + plane.width > pipe.x && detectCollision(pipe)) { isGameOver = true; }
-  });
-  updatePipes(); draw(); frameCount++; requestAnimationFrame(gameLoop);
+function gameOver() {
+  gameStarted = false;
+  alert("Game Over! Score: " + score);
+  document.getElementById("playButton").style.display = "block";  // Show play button again
 }
 
-window.addEventListener('click', () => { plane.velocity = plane.lift; });
-gameLoop();
+document.getElementById("playButton").addEventListener("click", startGame);
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === " ") {
+    plane.flap();
+  }
+});
+
+window.addEventListener("click", () => {
+  if (gameStarted) {
+    plane.flap();
+  }
+});
