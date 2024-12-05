@@ -11,7 +11,7 @@ body {
 /* Fullscreen Canvas */
 canvas {
   display: block;
-  background: transparent; /* Background is now the sky image set in game.js */
+  background: transparent; /* Transparent to show the sky background */
 }
 
 /* Centered Play Button */
@@ -33,28 +33,12 @@ canvas {
 }
 
 .play-button:hover {
-  background-color: #002244; /* Darker blue on hover */
-  transform: translate(-50%, -50%) scale(1.05); /* Slightly grow on hover */
+  background-color: #002244;
+  transform: translate(-50%, -50%) scale(1.05);
 }
 
 .play-button:active {
-  transform: translate(-50%, -50%) scale(0.95); /* Shrink on click */
-}
-
-/* Game Over Alert Styling */
-#game-over-alert {
-  display: none; /* Initially hidden */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
-  font-size: 24px;
-  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
-  color: white;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%) scale(0.95);
 }
 
 /* Score Counter */
