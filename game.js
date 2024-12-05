@@ -9,15 +9,15 @@ canvas.height = window.innerHeight;
 let plane;
 let pipes = [];
 let gameStarted = false;
-let gravity = 0.1;  // Reduced gravity force
-let ascendForce = 2;  // Increased ascend force
+let gravity = 0.1;
+let ascendForce = 2;
 let score = 0;
 
 const skyImage = new Image();
-skyImage.src = 'https://example.com/sky-with-clouds.png';  // Add a valid URL for sky background
+skyImage.src = 'https://media.istockphoto.com/vectors/cloud-and-sky-background-in-flat-style-cartoon-blue-cloudy-panorama-vector-id1215724660';
 
 const planeImage = new Image();
-planeImage.src = 'https://example.com/plane-image.png';  // Add a valid URL for plane image
+planeImage.src = 'https://media.istockphoto.com/vectors/3d-vector-cartoon-airplane-summer-journey-time-to-travel-concept-vector-id1457278025';
 
 class Plane {
   constructor() {
@@ -56,8 +56,8 @@ class Pipe {
 
   draw() {
     ctx.fillStyle = "#32CD32"; // Green pipes
-    ctx.fillRect(this.x, 0, this.width, this.height); // Top pipe
-    ctx.fillRect(this.x, this.height + this.gap, this.width, canvas.height - this.height - this.gap); // Bottom pipe
+    ctx.fillRect(this.x, 0, this.width, this.height);
+    ctx.fillRect(this.x, this.height + this.gap, this.width, canvas.height - this.height - this.gap);
   }
 
   update() {
@@ -67,7 +67,7 @@ class Pipe {
 
 function startGame() {
   gameStarted = true;
-  document.getElementById("playButton").style.display = "none"; // Hide play button
+  document.getElementById("playButton").style.display = "none"; 
   plane = new Plane();
   pipes = [];
   score = 0;
@@ -114,7 +114,7 @@ function animate() {
 function gameOver() {
   gameStarted = false;
   alert("Game Over! Score: " + score);
-  document.getElementById("playButton").style.display = "block"; // Show play button again
+  document.getElementById("playButton").style.display = "block";
 }
 
 document.getElementById("playButton").addEventListener("click", startGame);
@@ -130,3 +130,7 @@ window.addEventListener("click", () => {
     plane.flap();
   }
 });
+
+  
+
+    
