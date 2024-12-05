@@ -19,6 +19,18 @@ skyImage.src = 'https://media.istockphoto.com/vectors/cloud-and-sky-background-i
 const planeImage = new Image();
 planeImage.src = 'https://media.istockphoto.com/vectors/3d-vector-cartoon-airplane-summer-journey-time-to-travel-concept-vector-id1457278025';
 
+let imagesLoaded = 0;
+
+// Ensure all images are loaded before starting
+[skyImage, planeImage].forEach((img) => {
+  img.onload = () => {
+    imagesLoaded++;
+    if (imagesLoaded === 2) {
+      document.getElementById("playButton").style.display = "block"; // Show play button after loading
+    }
+  };
+});
+
 class Plane {
   constructor() {
     this.x = 150;
@@ -67,7 +79,7 @@ class Pipe {
 
 function startGame() {
   gameStarted = true;
-  document.getElementById("playButton").style.display = "none"; 
+  document.getElementById("playButton").style.display = "none";
   plane = new Plane();
   pipes = [];
   score = 0;
@@ -131,6 +143,5 @@ window.addEventListener("click", () => {
   }
 });
 
-  
 
-    
+
