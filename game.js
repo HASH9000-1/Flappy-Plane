@@ -1,6 +1,6 @@
 
 
- const canvas = document.getElementById("gameCanvas");
+  const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
@@ -9,8 +9,8 @@ canvas.height = window.innerHeight;
 let plane;
 let pipes = [];
 let gameStarted = false;
-let gravity = 0.05;  // Reduced gravity for smoother movement
-let ascendForce = 3; // Increased ascend force for better control
+let gravity = 0.05;
+let ascendForce = 3;
 let score = 0;
 
 const skyImage = new Image();
@@ -26,7 +26,7 @@ let imagesLoaded = 0;
   img.onload = () => {
     imagesLoaded++;
     if (imagesLoaded === 2) {
-      document.getElementById("playButton").style.display = "block"; // Show play button after loading
+      document.getElementById("playButton").style.display = "block"; // Show play button
     }
   };
 });
@@ -48,7 +48,6 @@ class Plane {
     this.velocity += gravity;
     this.y += this.velocity;
 
-    // Prevent the plane from going out of bounds
     if (this.y + this.height > canvas.height) {
       this.y = canvas.height - this.height;
     }
@@ -77,14 +76,14 @@ class Pipe {
   }
 
   update() {
-    this.x -= 2; // Speed of the pipes
+    this.x -= 2;
   }
 }
 
 function startGame() {
   if (imagesLoaded < 2) {
     console.log("Images not loaded yet, please try again.");
-    return; // Wait for images to load
+    return;
   }
 
   gameStarted = true;
@@ -92,7 +91,7 @@ function startGame() {
   plane = new Plane();
   pipes = [];
   score = 0;
-  animate();
+  requestAnimationFrame(animate); // Start the game loop
 }
 
 function drawBackground() {
@@ -107,7 +106,6 @@ function animate() {
   plane.update();
   plane.draw();
 
-  // Randomly generate new pipes
   if (Math.random() < 0.01) {
     pipes.push(new Pipe());
   }
@@ -116,13 +114,11 @@ function animate() {
     pipe.update();
     pipe.draw();
 
-    // Remove pipes that have passed the screen
     if (pipe.x + pipe.width < 0) {
       pipes.splice(index, 1);
       score++;
     }
 
-    // Check for collision
     if (
       plane.x + plane.width > pipe.x &&
       plane.x < pipe.x + pipe.width &&
@@ -138,13 +134,13 @@ function animate() {
 function gameOver() {
   gameStarted = false;
   alert("Game Over! Score: " + score);
-  document.getElementById("playButton").style.display = "block"; // Show play button
+  document.getElementById("playButton").style.display = "block"; // Show play button again
 }
 
 document.getElementById("playButton").addEventListener("click", startGame);
 
 window.addEventListener("keydown", (event) => {
-  if (event.key === " ") {
+  if (event.key === " " && gameStarted) {
     plane.flap();
   }
 });
